@@ -1,0 +1,332 @@
+/***********************************************/
+/* MOB - RESPOSIVE STYLES - DRAWER NAVIGATION */
+/*********************************************/
+
+/** MOB - TODO - Prefix transitions and calc operations, and extract some classes to specific files to be imported when needed **/
+
+/*** xs+ ***/
+/*** General ***/
+.sig_Home_DrawerRoot.sig_Home_DarkMode .sig_Home_ChangeOnDarkMode,
+.sig_Home_DrawerRoot.sig_Home_DarkMode .sig_Home_ChangeOnDarkMode .MuiSvgIcon-root,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeOnDarkMode,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeOnDarkMode .MuiSvgIcon-root {
+  color: #fff;
+}
+
+/*** Navigation ***/
+.sig_Home_DrawerRoot {
+  display: flex;
+  /* overflow-x: hidden; */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.sig_Home_DrawerRoot .sig_Home_ToolbarSpace {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  min-height: 64px;
+}
+.sig_Home_ToolbarIcon {
+  display: flex;
+  padding: 12px;
+}
+.sig_Home_MenuBar {
+  z-index: 1100;
+}
+.sig_Home_MenuBar .MuiToolbar-root {
+  justify-content: space-between;
+}
+.sig_Home_MenuButton {
+  margin-right: 0;
+  color: #5ea0d4;
+  transition: color 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+}
+.sig_Home_MenuButtonDisabled,
+.sig_Home_ToolbarIconDisabled span svg {
+  color: #c4c4c4;
+  cursor: default;
+}
+.sig_Home_MenuButtonDisabled:hover
+.sig_Home_ToolbarIconDisabled:hover span svg {
+  background-color: transparent;
+}
+.sig_Home_DrawerBkg {
+  background-color: #5ea0d46b;
+  opacity: 0;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: -100%;
+  z-index: 1195;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+.sig_Home_DrawerOpenBkg {
+  left: 0;
+  opacity: 1;
+  transition: opacity 225ms cubic-bezier(0.4, 0, 0.6, 1) 50ms;
+}
+.sig_Home_DrawerCloseBkg {
+  left: -100%;
+  opacity: 0;
+  transition: left 0ms cubic-bezier(0.4, 0, 0.6, 1) 300ms, opacity 300ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+}
+.sig_Home_Drawer {
+  width: 350px;
+  z-index: 1200;
+  position: fixed;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.sig_Home_DrawerOpen {
+  width: 350px;
+  left: 0;
+  transition: left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+}
+.sig_Home_DrawerClose {
+  left: -350px;
+  overflow-x: hidden;
+  transition: left 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+}
+.sig_Home_DrawerTitle {
+  padding-top: 6px;
+}
+.sig_Home_Separation_Between_Logos {
+  margin-left: 10px;
+}
+.sig_Home_DrawerNotifications {
+  margin-left: 40px;
+}
+.sig_Home_DrawerList {
+  padding: 10px;
+}
+
+.sig_Home_LanguageSwitch {
+  width: 80px;
+  height: 40px;
+  border: 1px solid #5ea0d4;
+}
+
+.sig_Home_LanguageSwitch .MuiInputBase-input {
+  padding: 12px
+}
+
+
+.sig_Home_LanguageItemSwitch {
+  padding: 5px;
+  border: 1px solid #5ea0d4;
+}
+
+.sig_Home_LanguageFlag {
+  width: 30px;
+  height: 20px;
+  border: 1px solid #888;
+  border-radius: 5px;
+}
+
+.sig_Home_ThemeSwitch {
+  right: 40px;
+  position: fixed;
+  color: #5ea0d4;
+}
+.sig_Home_DrawerThemeSwitch {
+  margin: 0;
+  position: static;
+  color: #5ea0d4;
+}
+.sig_Home_Link {
+  color: inherit;
+  text-decoration: none;
+}
+.sig_Drawer_SettingsModal_Root > .MuiDialog-container > .MuiPaper-root {
+  margin: 0;
+  max-width: none;
+  border-radius: 0;
+}
+.sig_Drawer_SettingsModal_Title {
+  text-align: center;
+  background-color: #5ea0d4;
+  color: #fff;
+  font-weight: 400;
+  padding: 8px 10px;
+  box-shadow: 0px 0 3px 1px #2424246b;
+}
+
+/*
+.sig_Drawer_SettingsModal_Content {
+  padding: 0 30px; 
+}
+.sig_Drawer_SettingsModal_Content p {
+  margin-top: 0;
+}
+*/
+
+.sig_Drawer_SettingsModal_Content a {
+  text-decoration: none;
+}
+.sig_Drawer_SettingsModal_Mail {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 1em;
+}
+.sig_Drawer_SettingsModal_Maintenance {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.sig_Drawer_SettingsModal_Root > .MuiDialog-container,
+.sig_Drawer_SettingsModal_Root > .MuiDialog-container,
+.sig_Drawer_SettingsModal_Root > .MuiDialog-container {
+  box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+}
+
+/******************/
+/* MEDIA QUERIES */
+/****************/
+
+/*** sm+ ***/
+@media (min-width: 425px) {
+  .sig_Drawer_SettingsModal_Root > .MuiDialog-container > .MuiPaper-root {
+    /* max-width: 425px; */
+    border-radius: 4px;
+  }
+}
+
+/*** md+ ***/
+@media (min-width: 768px) {
+  /*** Navigation ***/
+  .sig_Home_ToolbarSpace {
+    justify-content: flex-end;
+    min-height: 64px;
+  }
+  .sig_Home_MenuBar {
+    z-index: 1205;
+    margin-left: 0;
+    width: 100%;
+    transition: margin-left 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  }
+  .sig_Home_MenuBarShifted {
+    margin-left: 350px;
+    width: calc(100% - 350px);
+    transition: margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  }
+  .sig_Home_MenuBar .MuiToolbar-root {
+    justify-content: flex-start;
+  }
+  .sig_Home_MenuButton {
+    margin-right: 36px;
+  }
+  .sig_Home_MenuButtonShifted {
+    display: none;
+  }
+  .sig_Home_Drawer {
+    position: static;
+  }
+  .sig_Home_DrawerOpen {
+    width: 350px;
+    transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  }
+  .sig_Home_DrawerClose {
+    left: 0;
+    width: 73px;
+    transition: width 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  }
+  .sig_Home_DrawerBkg {
+    display: none !important;
+  }
+  .sig_Home_Drawer .sig_Home_DrawerHidden {
+    left: -73px;
+  }
+  .sig_Home_Drawer .sig_Home_DrawerVisible {
+    /*overflow: hidden;*/
+    left: 0px;
+    transition: left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  }
+}
+
+/*** lg+ ***/
+@media (min-width: 1024px) {
+}
+
+/*** xl+ ***/
+@media (min-width: 1440px) {
+}
+
+/*** Landscape devices ***/
+/*** Currently repeats various rules from the desktop version. 
+Could also apply all of them and then invalidate just a few. 
+Check which is more performant ***/
+@media (orientation: landscape) and (max-height: 767.95px), (orientation: landscape) and (hover: none) and (pointer: coarse) {
+  /*** General ***/
+  br.sig_Home_RemovableElement {
+    display: none;
+  }
+
+  /*** Navigation ***/
+  .sig_Home_DrawerRoot {
+    min-width: 72px; /* landscape tooolbar width */
+  }
+  .sig_Home_ToolbarSpace {
+    justify-content: space-between;
+    min-height: 64px;
+  }
+  .sig_Home_MenuBar {
+    z-index: 1205;
+    margin-left: 0;
+    left: 0;
+    opacity: 1;
+    width: 72px;
+    color: #5ea0d4;
+    box-shadow: none;
+    display: flex;
+    transition: opacity 225ms cubic-bezier(0.4, 0, 0.6, 1) 150ms;
+  }
+  .sig_Home_MenuBarShifted {
+    opacity: 0;
+    z-index: -100;
+    transition: opacity 0ms linear 0ms, z-index 0ms linear 0ms;
+  }
+  .sig_Home_MenuBar .MuiToolbar-root {
+    justify-content: flex-start;
+  }
+  .sig_Home_MenuButton {
+    padding: 0;
+    margin: auto;
+    /*margin-right: 36px;*/
+  }
+  .sig_Home_MenuButtonShifted {
+    display: none;
+  }
+  .sig_Home_MenuButtonDisabled {
+    color: #c4c4c4;
+    cursor: default;
+  }
+  .sig_Home_MenuButtonDisabled:hover {
+    background-color: transparent;
+  }
+  .sig_Home_Drawer {
+    position: static;
+  }
+  .sig_Home_DrawerOpen {
+    width: 500px;
+    transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  }
+  .sig_Home_DrawerClose {
+    left: 0;
+    width: 73px;
+    transition: width 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  }
+  .sig_Home_DrawerBkg {
+    display: none !important;
+  }
+}
+
+/*** Devices Portrait***/
+@media (orientation: portrait) and (hover: none) and (pointer: coarse) {
+  .sig_Home_MenuBar .MuiToolbar-root {
+    justify-content: space-between;
+  }
+}

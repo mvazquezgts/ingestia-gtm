@@ -1,0 +1,196 @@
+/*****************************************/
+/* MOB - RESPOSIVE STYLES - HOMEWRAPPER */
+/***************************************/
+
+/** MOB - TODO - Prefix transitions and calc operations, and extract some classes to specific files to be imported when needed **/
+
+/*** xs+ ***/ 
+/*** General ***/
+.sig_Home_HideScrollBar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+.sig_Home_HideScrollBar {
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+*:not(.sig_Home_HideScrollBar)::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+*:not(.sig_Home_HideScrollBar)::-webkit-scrollbar-track {
+    background-color: #e5eff7; 
+    border-radius: 10px;
+}
+*:not(.sig_Home_HideScrollBar)::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #7bc1f7; 
+}
+*:not(.sig_Home_HideScrollBar)::-webkit-scrollbar-thumb:hover {
+    background-color: #5ea0d4; 
+}
+.sig_Home_DrawerRoot.sig_Home_DarkMode .sig_Home_ChangeOnDarkMode,
+.sig_Home_DrawerRoot.sig_Home_DarkMode .sig_Home_ChangeOnDarkMode .MuiSvgIcon-root,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeOnDarkMode,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeOnDarkMode .MuiSvgIcon-root,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeChildIconOnDarkMode .MuiSvgIcon-root {
+    color: #fff;
+}
+.sig_Home_DrawerRoot.sig_Home_DarkMode .sig_Home_ChangeOnDarkMode_Bkg,
+.sig_Home_DrawerRoot.sig_Home_DarkMode .sig_Home_ChangeOnDarkMode_Bkg .MuiSvgIcon-root,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeOnDarkMode_Bkg,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeOnDarkMode_Bkg .MuiSvgIcon-root,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeChildIconOnDarkMode_Bkg .MuiSvgIcon-root {
+    background-color: #242424;
+}
+
+/*** Main Section ***/
+.sig_Home_Root {
+    display: flex;
+    /*overflow-x: hidden;*/
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.sig_Home_Content {
+    flex-grow: 1; 
+    overflow: hidden;
+    padding: 0;
+}
+.sig_Home_Copyright {
+    position: static;
+    margin-top: auto;
+    padding: 50px 0 15px;
+}
+.sig_Main_TitleWithIcon {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.sig_Main_IconButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 45px;
+    min-height: 45px;
+    width: 45px;
+    height: 45px;
+    border: 2px solid #5ea0d459;
+    border-radius: 4px;
+    color: #5ea0d4;
+    background-color: #fff;
+    transition: color 500ms ease 0ms,
+                background-color 500ms ease 0ms,
+                border-color 500ms ease 0ms;
+}    
+.sig_Main_IconButton:hover,
+.sig_Main_IconButtonActive {
+    cursor: pointer;
+    color: #fff;
+    background-color: #5ea0d4;
+    transition: color 500ms ease 0ms,
+                background-color 500ms ease 0ms,
+                border-color 500ms ease 0ms;
+}
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeOnDarkMode,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Main_IconButton {
+    border-color: #fff;
+    background-color: #2c2c2c;
+}
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Home_ChangeOnDarkMode:hover,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Main_IconButton:hover,
+.sig_Home_DrawerRoot.sig_Home_DarkMode + .sig_Home_Content .sig_Main_IconButtonActive {
+    border-color: #5ea0d4;
+}
+.sig_Main_IconButton.sig_Main_CameraSelectButton {
+    width: auto;
+    margin-right: auto;
+    min-width: 135px;
+}
+.sig_Main_IconButton.sig_Main_CameraSelectButton em,
+.sig_Main_IconButton.sig_Main_CameraSelectButton svg,
+.sig_Main_IconButton.sig_Main_CameraSelectButton .MuiSelect-select {
+    color: #5ea0d4;
+}
+.sig_Main_IconButton.sig_Main_CameraSelectButton:hover em,
+.sig_Main_IconButton.sig_Main_CameraSelectButton:hover svg,
+.sig_Main_IconButton.sig_Main_CameraSelectButton:hover .MuiSelect-select {
+    color: #fff;
+}
+.sig_Main_CameraSelectButton fieldset {
+    border: none;
+}
+.sig_Main_CameraSelectItem {
+    justify-content: start;
+    padding: 10px;
+}
+
+
+/******************/
+/* MEDIA QUERIES */
+/****************/
+
+/*** sm+ ***/ 
+@media (min-width: 425px) {
+    .sig_Main_IconButton.sig_Main_CameraSelectButton {
+        min-width: 200px;
+    }
+}
+
+/*** md+ ***/ 
+@media (min-width: 768px) {
+    /*** Main section ***/
+    .sig_Home_Content {
+        flex-grow: 1; 
+        padding: 24px;
+        overflow: visible;
+        position: relative;
+        min-height: 100vh;
+    }
+}
+
+/*** lg+ ***/ 
+@media (min-width: 1024px) {
+}
+
+/*** xl+ ***/ 
+@media (min-width: 1440px) {
+}
+
+/*** Landscape devices ***/ 
+/*** Currently repeats various rules from the desktop version. 
+Could also apply all of them and then invalidate just a few. 
+Check which is more performant ***/
+@media (orientation: landscape) and (max-height: 767.95px),
+(orientation: landscape) and (hover: none) and (pointer: coarse) {
+    /*** General ***/
+    *::-webkit-scrollbar {
+        display: initial; /* Restore scrollbar for Chrome, Safari and Opera */
+    }
+    * {
+        -ms-overflow-style: initial;  /* Restore scrollbar for IE and Edge */
+        scrollbar-width: initial;  /* Restore scrollbar for Firefox */
+    }
+    br.sig_Home_RemovableElement {
+        display: none;
+    }
+    main.sig_Home_Content {
+        flex-grow: 1;
+        padding: 24px;
+        overflow: visible;
+        position: relative;
+        min-height: 100vh;
+    }
+}
+/*** Landscape fix ***/
+@media (orientation: landscape) and (max-height: 767.95px) and (max-width: 680px) {
+    #root {
+        min-width: 0; /* Fix issue with scrolling and flex containers in Firefox. MOB TODO - Check if it causes other issues.*/
+    }
+    .sig_Home_Root {
+        overflow-x: auto;
+    }
+    .sig_Home_DrawerRoot {
+        min-width: 73px;
+    }
+}
