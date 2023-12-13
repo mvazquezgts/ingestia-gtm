@@ -36,6 +36,7 @@ export function HomeVirtualBG() {
     const greenScreenCanvasRef = useRef(null);
     const webRTC_videoElement = useRef(null);
 
+    const [isPlaying, setIsPlaying] = useState(false)
     const streams = useRef({ video: null, canvas1: null, canvas2: null });
     const mediaRecorders = useRef({ video: null, canvas1: null, canvas2: null, rcv: null });
     const recordedChunks = useRef({ video: [], canvas1: [], canvas2: [], rcv: [] });
@@ -818,6 +819,9 @@ export function HomeVirtualBG() {
     //     });     
     // }
 
+    useEffect(() => {
+        console.log("🚀 ~ file: HomeVirtualBG.js:825 ~ isPlaying ~ isPlaying:", isPlaying)
+    }, [isPlaying]);
 
     return (
         <>
@@ -962,14 +966,14 @@ export function HomeVirtualBG() {
                 <hr></hr>
                 
                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '10px', alignItems: 'center'}}>
-                    <Button disabled={isRecording} variant="contained" color="primary" onClick={startAllRecordings} style={{ width: '150px', height: '30px', '&:hover': { backgroundColor: '#4e90b3' }}}>
+                    <Button disabled={isRecording || !isPlaying} variant="contained" color="primary" onClick={startAllRecordings} style={{ width: '150px', height: '30px', '&:hover': { backgroundColor: '#4e90b3' }}}>
                         Grabar
                     </Button>
                     <Button disabled={!isRecording} variant="contained" color="secondary" onClick={stopAllRecordings} style={{ width: '150px', height: '30px', '&:hover': { backgroundColor: '#4e90b3' }}}>
                         Parar
                     </Button>
-                    <Button variant="contained" onClick={handleStart} style={{ color:'white', backgroundColor: 'green', width: '250px', height: '30px', '&:hover': { backgroundColor: '#4e90b3' } }}>
-                        Start
+                    <Button disabled={!isPlaying} variant="contained" onClick={handleStart} color="primary" style={{ width: '250px', height: '30px', '&:hover': { backgroundColor: '#4e90b3' } }}>
+                        Start VirtualBG
                     </Button>
                     <Chip style={{width: '100px'}} label={'FPS: '+ fpsVideoMain} variant="outlined" size="small" color="primary" />
                 </Box>
@@ -991,7 +995,7 @@ export function HomeVirtualBG() {
             </Paper>
             <Paper style={{width: '100%', padding: '10px'}} elevation={2}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '10px'}}>
-                    <video  ref={videoElementRef} id="gum_video" autoPlay muted playsInline className="mirror" style={{ display: 'none', width: videoWidth, height: videoHeight }} onEnded={() => setFpsVideoMain(0)} onPause={() => setFpsVideoMain(0)}/>
+                    <video  ref={videoElementRef} id="video_main" autoPlay muted playsInline className="mirror" style={{ display: 'none', width: videoWidth, height: videoHeight }} onPlay={()=>setIsPlaying(true)} onEnded={() => setFpsVideoMain(0)} onPause={() => setFpsVideoMain(0)}/>
                     <canvas ref={videoCanvasRef} id="video_canvas" className="mirror" style={{ width: videoWidth, height: videoHeight }}></canvas>
                     <canvas ref={transparentCanvasRef} id="transparent_canvas" className="mirror" style={{ width: videoWidth, height: videoHeight }}></canvas>
                     <canvas ref={greenScreenCanvasRef} id="green_screen_canvas" className="mirror" style={{ width: videoWidth, height: videoHeight }}></canvas>
