@@ -1,4 +1,5 @@
 /build
+/.firebase
 package.json
 /node_modules
 
