@@ -9,6 +9,8 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import { applyGreenMask, applyBinaryMask, applyBlurMask, applyImageMask, convertArrayToBinaryMask } from "../api/CanvasProcessing"
 import { useStreamProvider } from '../api/StreamProvider';
+import "react-image-gallery/styles/css/image-gallery.css"
+
 
 // import Resizer from 'react-image-file-resizer';
 
