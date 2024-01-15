@@ -1,25 +1,28 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FormControl, Select, MenuItem, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { SelfieSegmentation } from '@mediapipe/selfie_segmentation';
 import { Paper } from "@material-ui/core";
 import { Tabs, Tab } from "@material-ui/core";
 import { Chip } from '@material-ui/core'
 import { Box, Button, IconButton, Input } from '@material-ui/core';
-import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
+import { ArrowBackIos, ArrowForwardIos, Web } from '@material-ui/icons';
 import Slider from '@mui/material/Slider';
-import { styled } from '@mui/material/styles';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
-import Janus from 'janus-gateway';
-import adapter from 'webrtc-adapter';
-window.adapter = adapter;
 import { HomeWrapper } from "../components/utils/HomeWrapper";
 import CustomSlider from "../components/utils/CustomSlider";
 import { pInputSource, pWebRTCOptions, pScreenActivatedOptions, pVideoSettings } from "../utils/parameters";
 
+// import adapter from 'webrtc-adapter'
+// window.adapter = adapter;
 
+// import { WebRTC } from "../components/WebRTC";
+import { WebRTC } from "../components/WebRTC";
+import { Benchmarking2 } from "../components/Benchmarking2";
+import { SourceSelection } from "../components/SourceSelection";
 
 export function HomeVirtualBG() {
+    
     const [ tabInputSource, setTabInputSource ] = useState(pInputSource.WEBCAM);
     const [ tabWebRTC, setTabWebRTC ] = useState(pWebRTCOptions.LOCAL);
 
@@ -46,7 +49,7 @@ export function HomeVirtualBG() {
 
     const localPeerConnectionRef = useRef(null);
     const remotePeerConnectionRef = useRef(null);
-    
+
     const selfieSegmentationModel = useRef(null);
     const [selfieSegmentationModel_modelSelected, setSelfieSegmentationModel_modelSelected] = useState(1);
 
@@ -54,13 +57,8 @@ export function HomeVirtualBG() {
     const inputImageRef = useRef(null); 
     const [screenActivated, setScreenActivated] = useState(pScreenActivatedOptions.VIDEO);
 
-    const janus_connection = useRef(null)
-    
-
 
     useEffect(() => {
-        getDevices();
-        videoElementRef.current.addEventListener('play', updateCanvas);
         console.log('INIT')
         if (videoCanvasRef.current) {
             console.log('INIT - videoElement.current')
@@ -86,94 +84,7 @@ export function HomeVirtualBG() {
             streams.current.rcv = webRTC_videoStream
             prepareRecording(webRTC_videoStream, 'rcv');
         }
-
-        return () => {
-            videoElementRef.current.removeEventListener('play', updateCanvas);
-        };
     }, []);
-
-
-    // Handler functions
-    const getDevices = async () => {
-        let devices = await navigator.mediaDevices.enumerateDevices();
-        const videoInputDevices = devices.filter(device => device.kind === 'videoinput');
-        console.log("video devices:", videoInputDevices);
-        setVideoDevices(videoInputDevices);
-    };
-
-    const getVideo = async () => {
-        setBlobs({ video: null, canvas1: null, canvas2: null, rcv: null })
-        console.log(`Getting ${videoWidth}x${videoHeight} video`);
-        let videoIdx = deviceSelect.current.selectedIndex || 0
-        let videoSource = videoDevices[videoIdx]?.deviceId;
-        setSelectedWebcamIdx(videoIdx)
-        
-    
-        let stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                height: { videoHeight }, 
-                width: { videoWidth }, 
-                deviceId: videoSource ? { exact: videoSource } : undefined
-            }
-        });
-        videoElementRef.current.srcObject = stream;
-        videoElementRef.current.play();
-        console.log(`Capture camera with device ${stream.getTracks()[0].label}`);
-    };
-
-    function resetVideoElementRef(){
-        if (videoElementRef.current && videoElementRef.current.srcObject) {
-            videoElementRef.current.srcObject.getTracks().forEach(track => track.stop());
-        }
-        videoElementRef.current.srcObject = null;
-    }
-    
-
-    const handleResolutionChange = async (width, height) => {
-        resetVideoElementRef()
-        setVideoWidth(width);
-        setVideoHeight(height);
-        await getVideo();
-    };
-
-    const loadVideoFile = (file) => {
-        const url = URL.createObjectURL(file);
-        videoElementRef.current.src = url;
-        videoElementRef.current.play();
-        console.log(`Loaded video file: ${file.name}`);
-    };
-
-
-    // LOAD    IMAGE
-    const loadImageFile = (file) => {
-        const url = URL.createObjectURL(file);
-        const canvas = videoCanvasRef.current;
-        const context = canvas.getContext('2d');
-        const img = new Image();
-
-        inputImageRef.current = new Image()
-        inputImageRef.current.src = url
-
-        img.onload = () => {
-            canvas.width = videoWidth;
-            canvas.height = videoHeight;
-            context.drawImage(img, 0, 0, videoWidth, videoHeight);
-        };
-        img.src = url;
-    };
-
-
-    const switchSource = async (source) => {
-        inputImageRef.current = null
-        resetVideoElementRef()
-        if (source === 'webcam') {
-            await getVideo();
-        } else if (source instanceof File) {
-            loadVideoFile(source);
-        }
-    };
-
-
 
     const handleStart = () => {
         console.log('Load selfieSegmentation model');
@@ -202,9 +113,7 @@ export function HomeVirtualBG() {
         }else{
             console.log('Ya cargado previamente selfieSegmentation model');
         }
-        
     };
-
 
 
     const initRefreshFrameLoop = () => {
@@ -237,67 +146,12 @@ export function HomeVirtualBG() {
     };
 
 
-    function transparent(results, ctx) {
-        ctx.clearRect(0, 0, videoWidth, videoHeight);
-        // Draw the mask
-        ctx.drawImage(results.segmentationMask, 0, 0, videoWidth, videoHeight);
-        // Cambia el modo de composición para que solo se dibuje sobre la máscara
-        ctx.globalCompositeOperation = 'source-in';
-        // Dibuja el video original, que solo se aplicará donde la máscara es visible
-        ctx.drawImage(results.image, 0, 0, videoWidth, videoHeight);
-        // Restablece el modo de composición para futuras operaciones
-        ctx.globalCompositeOperation = 'source-over';
-    }
-
     const [threshold, setThreshold] = useState(128);
     const thresholdRef = useRef(128);
     const handleSliderChange = (event) => {
         setThreshold(event.target.value);
         thresholdRef.current = event.target.value
     };
-
-
-    function greenScreen(results, ctx) {
- 
-        console.log('THRESHOLD: ', threshold)
-        console.log('thresholdRef.current: ', thresholdRef.current)
-
-        ctx.clearRect(0, 0, videoWidth, videoHeight);
-        // Draw the mask
-        ctx.drawImage(results.segmentationMask, 0, 0, videoWidth, videoHeight);
-        const imageData = ctx.getImageData(0, 0, videoWidth, videoHeight);
-
-        // for (let i = 0; i < imageData.data.length; i += 1) {
-        //     imageData.data[i] = imageData.data[i] > thresholdRef.current ? 255 : 0;
-        // }
-
-        for (let i = 0; i < imageData.data.length; i += 4) { // Avanza 4 bytes en cada iteración
-            let alpha = imageData.data[i + 3]; // El canal alfa es el cuarto byte de cada grupo de 4 bytes
-            if (alpha >= thresholdRef.current) {
-                imageData.data[i + 3] = 255; // Establecer alfa a 255 si supera el umbral
-                imageData.data[i + 0] = 255; // Establecer alfa a 255 si supera el umbral
-                imageData.data[i + 1] = 255; // Establecer alfa a 255 si supera el umbral
-                imageData.data[i + 2] = 255; // Establecer alfa a 255 si supera el umbral
-            } else {
-                imageData.data[i + 3] = 0; // Establecer alfa a 0 si no supera el umbral
-                imageData.data[i + 0] = 0; // Establecer alfa a 255 si supera el umbral
-                imageData.data[i + 1] = 0; // Establecer alfa a 255 si supera el umbral
-                imageData.data[i + 2] = 0; // Establecer alfa a 255 si supera el umbral
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-
-        // Fill green on everything but the mask
-        ctx.globalCompositeOperation = 'source-out';
-        ctx.fillStyle = '#00FF00';
-        // ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, videoWidth, videoHeight);
-        
-        // // Add the original video back in (in image) , but only overwrite missing pixels.
-        ctx.globalCompositeOperation =  'destination-atop';
-        ctx.drawImage(results.image, 0, 0, videoWidth, videoHeight);
-    }
-
 
     /// INICIO PARTE - GRABAR LOS VÍDEOS 
 
@@ -353,6 +207,11 @@ export function HomeVirtualBG() {
         }, 0);
     };
 
+
+
+
+
+    
 
     const startWebRTC = (stream_selected) => {
         console.log('START WEB RTC - ECHO TEST');
@@ -645,22 +504,6 @@ export function HomeVirtualBG() {
 
 
 
-    const [imageSrc, setImageSrc] = useState(null);
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-    
-        reader.onloadend = () => {
-            console.log('LOADED IMAGE INTO VIDEO COMPONENT')
-            setImageSrc(reader.result);
-        };
-    
-        if (file) {
-          reader.readAsDataURL(file);
-        }
-        getVideo()
-    }
-
     const updateCanvas = () => {
         if (videoElementRef.current && videoCanvasRef.current) {
             if (inputImageRef.current){
@@ -711,114 +554,6 @@ export function HomeVirtualBG() {
     }, [selfieSegmentationModel_modelSelected]);
 
 
-    const boton1 = () => {
-
-        janus_connection.current = Janus.init({
-            debug: true,
-            plugin: "janus.plugin.echotest",
-            callback: function() {
-                console.log("Janus initialized");
-                // Further Janus setup like creating sessions goes here
-            }
-        });
-
-
-    };
-
-    const boton2 = () => {
-        console.log("🚀 ~ file: HomeVirtualBG.js:811 ~ boton2 ~ boton2:", boton2)   
-
-        if (Janus.isWebrtcSupported()) {
-            Janus.init({
-                debug: true,
-                callback: boton3
-            });
-        } else {
-            alert("WebRTC is not supported by your browser.");
-        }
-    }
-
-
-    const boton3 = () => {
-        console.log("🚀 ~ file: HomeVirtualBG.js:816 ~ boton3 ~ boton3:", boton3)     
-    }
-
-
-    // const boton4 = () => {
-    //     janus_connection.current = Janus.init({
-    //         debug: true,
-    //         success: () => {
-    //             // Attach to a plugin, e.g., VideoRoom or Streaming
-    //             janus_connection.current.attach({
-    //                 plugin: "janus.plugin.videoroom", // Replace with your chosen plugin
-    //                 success: (pluginHandle) => {
-    //                     videoHandle = pluginHandle;
-                    
-    //                     // Create/Join a Video Room
-    //                     const register = { 
-    //                         "request": "join", 
-    //                         "room": 1234, // Replace with your room ID
-    //                         "ptype": "publisher",
-    //                         "display": "MyDisplayName" // Replace with the user's display name
-    //                     };
-                    
-    //                     videoHandle.send({ "message": register });
-                    
-    //                     // Handle incoming messages
-    //                     videoHandle.onmessage = (msg, jsep) => {
-    //                         if (jsep) {
-    //                             videoHandle.handleRemoteJsep({ jsep: jsep });
-    //                         }
-    //                     };
-                    
-    //                     // Publish your stream
-    //                     navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-    //                         .then((stream_selected) => {
-    //                             const publish = { 
-    //                                 "request": "configure", 
-    //                                 "audio": true, 
-    //                                 "video": true 
-    //                             };
-                    
-    //                             videoHandle.createOffer({
-    //                                 stream: stream_selected,
-    //                                 // No media provided: by default, it's sendrecv for audio and video
-    //                                 success: (jsep) => {
-    //                                     let publish = { "request": "publish", "audio": false, "video": true };
-    //                                     videoHandle.send({ "message": publish, "jsep": jsep });
-    //                                 },
-    //                                 error: (error) => {
-    //                                     console.error("WebRTC error:", error);
-    //                                 }
-    //                             });
-    //                         })
-    //                         .catch((error) => {
-    //                             console.error("Error accessing media devices:", error);
-    //                         });
-    //                 },
-    //                 error: (error) => {
-    //                     console.error("Error attaching plugin...", error);
-    //                 },
-    //                 onlocalstream: (stream) => {
-    //                     // Attach the local stream to the local video element
-    //                     if (greenScreenCanvasRef.current) {
-    //                         Janus.attachMediaStream(greenScreenCanvasRef.current, stream);
-    //                     }
-    //                 },
-    //                 onremotestream: (stream) => {
-    //                     // Attach the remote stream to the remote video element
-    //                     if (webRTC_videoElement.current) {
-    //                         Janus.attachMediaStream(webRTC_videoElement.current, stream);
-    //                     }
-    //                 },
-    //             });
-    //         },
-    //         error: (error) => {
-    //             console.error("Error initializing Janus...", error);
-    //         },
-    //     });     
-    // }
-
     useEffect(() => {
         console.log("🚀 ~ file: HomeVirtualBG.js:825 ~ isPlaying ~ isPlaying:", isPlaying)
     }, [isPlaying]);
@@ -852,89 +587,7 @@ export function HomeVirtualBG() {
 
                 <hr></hr>
 
-                <Tabs
-                    value={tabInputSource}
-                    onChange={(event, newValue) => { setTabInputSource(newValue); setBlobs({ video: null, canvas1: null, canvas2: null, rcv: null }) }}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    style={{
-                    width: '90%', 
-                    margin: 'auto', 
-                    borderBottom: '1px solid #e8e8e8'
-                    }}
-                    centered
-                >
-                    <Tab 
-                    style={{
-                        minWidth: '20%', 
-                        fontSize: '15px', 
-                        backgroundColor: tabInputSource === pInputSource.WEBCAM ? 'red' : 'transparent', 
-                        borderTopLeftRadius: '10px', 
-                        borderTopRightRadius: '10px'
-                    }} 
-                    label="WEBCAM" 
-                    />
-                    <Tab 
-                    style={{
-                        minWidth: '20%', 
-                        fontSize: '15px', 
-                        backgroundColor: tabInputSource === pInputSource.VIDEO ? 'red' : 'transparent', 
-                        borderTopLeftRadius: '10px', 
-                        borderTopRightRadius: '10px'
-                    }} 
-                    label="VIDEO" 
-                    />
-                    <Tab 
-                    style={{
-                        minWidth: '20%', 
-                        fontSize: '15px', 
-                        backgroundColor: tabInputSource === pInputSource.IMG ? 'red' : 'transparent', 
-                        borderTopLeftRadius: '10px', 
-                        borderTopRightRadius: '10px'
-                    }} 
-                    label="IMAGE" 
-                    />
-                </Tabs>
-
-                {tabInputSource === pInputSource.WEBCAM && (
-                    <Paper style={{margin: '2%'}} elevation={5}>
-                    <Button variant="outlined" onClick={() => switchSource('webcam')}>START / RESTART Webcam</Button>
-                    <FormControl fullWidth>
-                        <Select
-                        labelId="camera-source-label"
-                        id="devices"
-                        label="Choose your camera source"
-                        onChange={getVideo}
-                        inputRef={deviceSelect}
-                        defaultValue={selectedWebcamIdx}
-                        >
-                        {videoDevices.map((device, index) => (
-                            <MenuItem key={index} value={index}>{device.label}</MenuItem>
-                        ))}
-                        </Select>
-                    </FormControl>
-                    </Paper>
-                )}
-
-                {tabInputSource === pInputSource.VIDEO && (
-                    <Paper style={{margin: '2%'}} elevation={5}>
-                        <Input
-                            type="file"
-                            inputProps={{ accept: 'video/*' }}
-                            onChange={(e) => switchSource(e.target.files[0])}
-                        />
-                    </Paper>
-                )}
-
-                {tabInputSource === pInputSource.IMG && (
-                    <Paper style={{margin: '2%'}} elevation={5}>
-                        <Input
-                            type="file"
-                            inputProps={{ accept: 'image/*' }}
-                            onChange={(e) => loadImageFile(e.target.files[0])}
-                        />
-                    </Paper>
-                )}
+                <SourceSelection setBlobs={setBlobs} videoElementRef={videoElementRef} videoCanvasRef={videoCanvasRef} inputImageRef={inputImageRef} videoHeight={videoHeight} videoWidth={videoWidth}/>
 
 
                 <hr></hr>
@@ -995,7 +648,7 @@ export function HomeVirtualBG() {
             </Paper>
             <Paper style={{width: '100%', padding: '10px'}} elevation={2}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '10px'}}>
-                    <video  ref={videoElementRef} id="video_main" autoPlay muted playsInline className="mirror" style={{ display: 'none', width: videoWidth, height: videoHeight }} onPlay={()=>setIsPlaying(true)} onEnded={() => setFpsVideoMain(0)} onPause={() => setFpsVideoMain(0)}/>
+                    <video  ref={videoElementRef} id="video_main" loop autoPlay muted playsInline className="mirror" style={{ display: 'none', width: videoWidth, height: videoHeight }} onPlay={()=>setIsPlaying(true)} onEnded={() => setFpsVideoMain(0)} onPause={() => setFpsVideoMain(0)}/>
                     <canvas ref={videoCanvasRef} id="video_canvas" className="mirror" style={{ width: videoWidth, height: videoHeight }}></canvas>
                     <canvas ref={transparentCanvasRef} id="transparent_canvas" className="mirror" style={{ width: videoWidth, height: videoHeight }}></canvas>
                     <canvas ref={greenScreenCanvasRef} id="green_screen_canvas" className="mirror" style={{ width: videoWidth, height: videoHeight }}></canvas>
@@ -1117,7 +770,7 @@ export function HomeVirtualBG() {
                         </Button>
                         <Button
                             variant="contained"
-                            onClick={() => boton3(streams.current.canvas2)}
+                            onClick={() => checkWebRTCSupport(streams.current.canvas2)}
                             sx={{ backgroundColor: '#5ea0d4', width: '200px', height: '50px', '&:hover': { backgroundColor: '#4e90b3' }}}
                         >
                             BOTON3
@@ -1125,7 +778,7 @@ export function HomeVirtualBG() {
                         <Button
                             variant="contained"
                             color="secondary"
-                            onClick={ano}
+                            onClick={checkWebRTCSupport}
                             sx={{ backgroundColor: '#5ea0d4', width: '200px', height: '50px', '&:hover': { backgroundColor: '#4e90b3' }}}
                         >
                             BOTON4
@@ -1134,14 +787,11 @@ export function HomeVirtualBG() {
                     )}
 
                 </Paper>
-                
 
-
+                { false ?
 
                 <Paper style={{ width: '100%', padding: '10px' }} elevation={2}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    
-                    {/* Box de la derecha para connectionStatusSRC */}
                     <Box style={{ 
                         marginLeft: '10px', 
                         minWidth: '150px', 
@@ -1183,8 +833,6 @@ export function HomeVirtualBG() {
 
                     </Box>
 
-
-                    {/* Componente de video */}
                     {localPeerConnectionRef.current && (
                         <video
                         controls
@@ -1198,7 +846,8 @@ export function HomeVirtualBG() {
                         ></video>
                     )}
 
-                    {/* Box de la izquierda para connectionStatusRCV */}
+
+
                     <Box style={{ 
                         marginRight: '10px', 
                         minWidth: '150px', 
@@ -1243,6 +892,10 @@ export function HomeVirtualBG() {
                     </div>
                 </Paper>
 
+                : <WebRTC streams={streams} stream={streams.current.video}/>
+
+                }
+
             </div>
 
             <div style={{display: screenActivated === pScreenActivatedOptions.EVALUATION ? 'block' : 'none'}}>
@@ -1272,6 +925,8 @@ export function HomeVirtualBG() {
                     <hr></hr>
 
                 </Paper>
+
+                <Benchmarking2/>
             </div>
 
             </HomeWrapper>

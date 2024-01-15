@@ -11,7 +11,7 @@ export function HomeWrapper({ children }) {
         <div className="sig_Home_Root">
             <CustomDrawer />
             <main className={`sig_Home_Content ${showDrawer ? 'sig_Home_ContentVisibleDrawer' : 'sig_Home_ContentHiddenDrawer'}`}>
-                <div className="sig_Home_ToolbarSpace" />
+                <hr></hr>
                 {children}
                 <br className='sig_Home_RemovableElement' />
                 <Box className='sig_Home_Copyright'>

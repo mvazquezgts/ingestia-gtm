@@ -17,9 +17,22 @@ export const pWebRTCOptions = {
 };
 
 
-export const pScreenActivatedOptions= {
+// export const pScreenActivatedOptions= {
+//   VIDEO: 0,
+//   WEBRTC: 1,
+//   EVALUATION: 2,    
+// };
+
+export const pSectionActivatedOptions= {
   VIDEO: 0,
   WEBRTC: 1,
   EVALUATION: 2,    
+};
+
+
+export const pBenchmarkingImage= {
+  ORIGINAL: 0,
+  GREEN: 1,
+  BINARY: 2,    
 };
 

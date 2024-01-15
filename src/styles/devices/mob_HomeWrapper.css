@@ -142,7 +142,7 @@
     /*** Main section ***/
     .sig_Home_Content {
         flex-grow: 1; 
-        padding: 24px;
+        /* padding: 24px; */
         overflow: visible;
         position: relative;
         min-height: 100vh;
@@ -176,7 +176,7 @@ Check which is more performant ***/
     }
     main.sig_Home_Content {
         flex-grow: 1;
-        padding: 24px;
+        /* padding: 24px; */
         overflow: visible;
         position: relative;
         min-height: 100vh;

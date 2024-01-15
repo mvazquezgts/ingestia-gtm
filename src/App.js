@@ -5,7 +5,10 @@ import { CustomThemeProvider } from "./api/ThemeProvider";
 import { SnackbarProvider } from "notistack";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { StylesProvider } from "@material-ui/core/styles";
-import { HomeVirtualBG } from "./screens/HomeVirtualBG";
+import { Home } from "./screens/Home";
+
+import { StreamProvider } from "./api/StreamProvider";
+import { SegmenterProvider } from "./api/SegmenterProvider";
 
 function App() {
   return (
@@ -15,7 +18,11 @@ function App() {
           <SnackbarProvider maxSnack={2} autoHideDuration={2000}>
             <BrowserRouter>
               <Switch>
-                <HomeVirtualBG/>
+                <SegmenterProvider>
+                  <StreamProvider>
+                    <Home/>
+                  </StreamProvider>
+                </SegmenterProvider>
               </Switch>
             </BrowserRouter>
           </SnackbarProvider>

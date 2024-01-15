@@ -33,7 +33,6 @@ export function CustomDrawer() {
 
     return (
         <div className={ darkMode ? "sig_Home_DrawerRoot sig_Home_DarkMode" : "sig_Home_DrawerRoot"} >
-            <CssBaseline />
             <AppBar
                 color='inherit'
                 position="fixed"
@@ -60,35 +59,8 @@ export function CustomDrawer() {
                             <ThemeButton className='sig_Home_DrawerThemeSwitch sig_Home_ChangeOnDarkMode' handleThemeSwitch={handleThemeSwitch} />
                         </div>
                     </div>
-
                 </Toolbar>
             </AppBar>
-            <div className={clsx('sig_Home_DrawerBkg', {
-                'sig_Home_DrawerOpenBkg': open,
-                'sig_Home_DrawerCloseBkg': !open,
-            })} onClick={handleDrawerClose}>            
-            </div>
-            <Drawer
-                variant="permanent"
-                className={clsx('sig_Home_Drawer', {
-                    'sig_Home_DrawerOpen': open,
-                    'sig_Home_DrawerClose': !open,
-                })}
-                classes={{
-                    paper: clsx({
-                        'sig_Home_DrawerOpen': open,
-                        'sig_Home_DrawerClose': !open,
-                        'sig_Home_DrawerHidden': !showDrawer,
-                        'sig_Home_DrawerVisible': showDrawer,
-                    }),
-                }}
-                >               
-                <div className='sig_Home_ToolbarSpace'>
-                    <IconButton className='sig_Home_ChangeOnDarkMode' onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
-                    </IconButton>
-                </div>
-            </Drawer>
         </div >
     );
 }
