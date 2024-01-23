@@ -46,6 +46,9 @@
 <img src="doc/3_SeccionObjetiva.png" alt="Seccion Objetiva" width="75%"/>
 
 ------
+#### Diagramas: [Draw.io](https://drive.google.com/file/d/1BiC_PQ2Q_6zWbVIcBnJGgOP1IeHU9QOW/view)
+
+------
 
 #### Recursos
 * [Modelos (.tfile)](https://firebasestorage.googleapis.com/v0/b/ingestiagtm.appspot.com/o/models.zip?alt=media&token=3ef20792-7b2c-4890-8445-52bf1e5880c5)
